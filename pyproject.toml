@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "stock-analyzer"
+version = "0.1.0"
+description = ""
+authors = ["LucaLeano <luca.rougemont@leano.fr>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+streamlit = "^1.43.2"
+yfinance = "^0.2.54"
+deep-translator = "^1.11.4"
+matplotlib = "^3.10.1"
+pandas = "^2.2.3"
+plotly = "^6.0.0"
+black = "^25.1.0"
+pymupdf = "^1.25.4"
+ollama = "^0.4.7"
+python-dotenv = "^1.0.1"
+streamlit-aggrid = "^1.1.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
