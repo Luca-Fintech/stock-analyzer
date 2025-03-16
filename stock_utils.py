@@ -25,30 +25,33 @@ def get_stock_info(ticker):
         stock = yf.Ticker(ticker)
         info = stock.info
 
+        # Récupération de la market cap
+        market_cap = info.get("marketCap", None)
+
+        # Définition de la classification (Small, Mid, Large Cap)
+        if market_cap is not None:
+            if market_cap < 2e9:
+                classification = "Small Cap"
+            elif 2e9 <= market_cap < 10e9:
+                classification = "Mid Cap"
+            else:
+                classification = "Large Cap"
+        else:
+            classification = "N/A"
+
         return {
             "nom": info.get("longName", "N/A"),
             "secteur": info.get("sector", "N/A"),
-            "industrie": info.get("industry", "N/A"),  # Ajout de l'industrie
+            "industrie": info.get("industry", "N/A"),
             "cours": info.get("regularMarketPrice", "N/A"),
             "variation": info.get("regularMarketChangePercent", 0.0),
-            "devise": info.get("currency", "N/A"),  # Ajout de la devise
+            "devise": info.get("currency", "N/A"),
+            "market_cap": market_cap,
+            "classification": classification,
         }
     except Exception as e:
         print(f"Erreur lors de la récupération des données : {e}")
         return None
-
-
-import requests
-import yfinance as yf
-from dotenv import load_dotenv
-import os
-
-# Charger la clé API depuis .env
-load_dotenv()
-API_KEY = os.getenv("FMP_API_KEY")
-
-if not API_KEY:
-    raise ValueError("❌ Clé API FMP manquante ! Vérifie ton fichier .env.")
 
 
 def get_fundamental_ratios(ticker):
@@ -59,7 +62,6 @@ def get_fundamental_ratios(ticker):
     try:
         print(f"🔍 Récupération des données pour {ticker}")
 
-        # 📡 1. Requête unique à Financial Modeling Prep (FMP)
         url = f"https://financialmodelingprep.com/api/v3/key-metrics/{ticker}?apikey={API_KEY}"
         print(f"📡 Envoi de la requête API FMP : {url}")  # Debug
 
@@ -87,14 +89,12 @@ def get_fundamental_ratios(ticker):
             debt_to_equity = latest_metrics.get("debtToEquity", "N/A")
             dividend_yield = latest_metrics.get("dividendYield", "N/A")
             payout_ratio = latest_metrics.get("payoutRatio", "N/A")
-
-            # 🔹 Nouveaux ratios
             working_capital = latest_metrics.get("workingCapital", "N/A")
             free_cash_flow_yield = latest_metrics.get("freeCashFlowYield", "N/A")
             capex_to_revenue = latest_metrics.get("capexToRevenue", "N/A")
-            cash_conversion_cycle = latest_metrics.get("cashConversionCycle", "N/A")
             earnings_yield = latest_metrics.get("earningsYield", "N/A")
-            roce = latest_metrics.get("returnOnCapitalEmployed", "N/A")  # 🆕 Ajouté
+            debt_to_equity = latest_metrics.get("debtToEquity", "N/A")
+            net_debt_to_ebitda = latest_metrics.get("netDebtToEBITDA", "N/A")
 
         except Exception as e:
             print(f"❌ Erreur lors de la récupération des données FMP : {e}")
@@ -104,7 +104,6 @@ def get_fundamental_ratios(ticker):
             ) = "N/A"
             cash_conversion_cycle = earnings_yield = roce = "N/A"
 
-        # 🔍 2. Récupération des données Yahoo Finance pour MarketCap/Revenue et Croissance
         stock = yf.Ticker(ticker)
         info = stock.info
 
@@ -141,9 +140,9 @@ def get_fundamental_ratios(ticker):
             "Working Capital Ratio": working_capital_ratio,
             "Free Cash Flow Yield": free_cash_flow_yield,
             "Capex/Revenue": capex_to_revenue,
-            "Cash Conversion Cycle": cash_conversion_cycle,
             "Earnings Yield": earnings_yield,
-            "Return on Capital Employed (ROCE)": roce,
+            "Debt-to-Equity": debt_to_equity,
+            "NetDebt/EBITDA": net_debt_to_ebitda,
         }
 
     except Exception as e:

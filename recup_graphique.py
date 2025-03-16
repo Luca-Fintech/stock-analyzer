@@ -16,7 +16,6 @@ def display_financial_graphs(ticker):
 
     years = list(data["years"])
 
-    # 📊 1. Graphique des Marges
     df_marges = pd.DataFrame(
         {
             "Année": years * 3,
@@ -58,7 +57,6 @@ def display_financial_graphs(ticker):
     )
     st.plotly_chart(fig_revenue, use_container_width=True)
 
-    # 📉 3. Graphique Nombre d'Actions en Circulation
     df_shares = pd.DataFrame(
         {"Année": years, "Nombre d'Actions": data["shares_outstanding"]}
     )

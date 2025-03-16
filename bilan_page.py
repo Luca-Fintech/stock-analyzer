@@ -13,13 +13,19 @@ load_dotenv()
 API_KEY = os.getenv("FMP_API_KEY")
 
 COLUMNS_TO_REMOVE = [
-    "symbol", "reportedCurrency", "cik", "fillingDate", "acceptedDate", "period"
+    "symbol",
+    "reportedCurrency",
+    "cik",
+    "fillingDate",
+    "acceptedDate",
+    "period",
 ]
+
 
 def get_financial_statement(statement_type, ticker):
     """
     Récupère un état financier spécifique depuis Financial Modeling Prep (FMP).
-    
+
     statement_type : "balance-sheet-statement", "income-statement", "cash-flow-statement"
     """
     url = f"https://financialmodelingprep.com/api/v3/{statement_type}/{ticker}?limit=10&apikey={API_KEY}"
@@ -41,7 +47,9 @@ def get_financial_statement(statement_type, ticker):
     # 🔹 **Conversion des chiffres > 1M en milliards**
     def convert_to_billions(value):
         if isinstance(value, (int, float)) and abs(value) > 1_000_000:
-            return round(value / 1_000_000_000, 2)  # Conversion en milliards avec 2 décimales
+            return round(
+                value / 1_000_000_000, 2
+            )  # Conversion en milliards avec 2 décimales
         return value
 
     df = df.applymap(convert_to_billions)
@@ -52,6 +60,7 @@ def get_financial_statement(statement_type, ticker):
 
     return df
 
+
 def display_bilan_page(ticker):
     """
     Affiche la section des bilans comptables avec sélection interactive.
@@ -59,9 +68,9 @@ def display_bilan_page(ticker):
     st.subheader("📑 **État Financier - Standard**")
 
     selected_statement = st.radio(
-        "Sélectionnez un état financier :", 
-        ["🏦 Bilan Comptable", "📉 Compte de Résultat", "💸 Flux de Trésorerie"], 
-        horizontal=True
+        "Sélectionnez un état financier :",
+        ["🏦 Bilan Comptable", "📉 Compte de Résultat", "💸 Flux de Trésorerie"],
+        horizontal=True,
     )
 
     statement_map = {
@@ -78,10 +87,14 @@ def display_bilan_page(ticker):
         # 🔹 **Création des options pour AgGrid**
         gb = GridOptionsBuilder.from_dataframe(statement_data)
         gb.configure_default_column(
-            resizable=True, 
-            cellStyle={"textAlign": "center", "fontWeight": "bold"}  # Centrage + Gras
+            resizable=True,
+            cellStyle={"textAlign": "center", "fontWeight": "bold"},  # Centrage + Gras
         )
-        gb.configure_grid_options(domLayout='autoHeight', fit_columns_on_grid_load=True)
+        gb.configure_grid_options(domLayout="autoHeight", fit_columns_on_grid_load=True)
 
-        # ✅ **Affichage du tableau avec noms des lignes visibles**
-        AgGrid(statement_data, gridOptions=gb.build(), height=600, fit_columns_on_grid_load=True)
+        AgGrid(
+            statement_data,
+            gridOptions=gb.build(),
+            height=600,
+            fit_columns_on_grid_load=True,
+        )
