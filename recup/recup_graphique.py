@@ -1,7 +1,7 @@
 import streamlit as st
 import plotly.express as px
 import pandas as pd
-from stock_utils import get_financial_data
+from utils.stock_utils import get_financial_data
 
 
 def display_financial_graphs(ticker):

@@ -1,5 +1,5 @@
 import streamlit as st
-from stock_utils import get_stock_info
+from utils.stock_utils import get_stock_info
 
 
 def display_stock_info(ticker):

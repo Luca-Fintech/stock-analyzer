@@ -126,7 +126,7 @@ def get_fundamental_ratios(ticker):
 
         # Retour des ratios fondamentaux
         return {
-            "ROE": roe,
+            "ROE": roe * 100,
             "ROIC": roic,
             "PER": per,
             "MarketCap/Total Revenue": market_cap_to_revenue,

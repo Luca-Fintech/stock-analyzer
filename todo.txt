@@ -1,0 +1,3 @@
+- Modifier la croissance pour calculer la croissance organique des dernières années
+- rajouter des screeners
+- rajouter des points de comparaison 

@@ -1,17 +1,21 @@
+import sys
+import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 import streamlit as st
 
-# 📌 `st.set_page_config()` DOIT être appelé en premier
 st.set_page_config(page_title="📊 Stock Analyzer", layout="wide")
 
-from recup_ticker import get_ticker
-from recup_infos import display_stock_info
-from recup_summary import display_stock_summary
-from recup_fundamentaux import display_fundamental_ratios
-from recup_graphique import display_financial_graphs
-from recup_llm import process_pdfs_with_llm
-from bilan_page import display_bilan_page  # 🔥 Importation de la gestion des bilans
+from recup.recup_ticker import get_ticker
+from recup.recup_infos import display_stock_info
+from recup.recup_summary import display_stock_summary
+from recup.recup_fundamentaux import display_fundamental_ratios
+from recup.recup_graphique import display_financial_graphs
+from recup.recup_llm import process_pdfs_with_llm
+from recup.bilan_page import display_bilan_page  
+from recup.recup_llm_analysis import display_stock_analysis
 
-# 📌 Titre de l'application
 st.title("📊 Independance AM - Stock analyzer")
 
 ticker = get_ticker()
@@ -35,6 +39,8 @@ if ticker:
         display_fundamental_ratios(ticker)
         st.markdown("---")
         display_financial_graphs(ticker)
+        st.markdown("---")
+        display_stock_analysis(ticker)
 
     elif selected_section == "📑 Bilan":
         display_bilan_page(ticker)

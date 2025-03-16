@@ -1,8 +1,8 @@
 import ollama
 import streamlit as st
 import subprocess
-from pdf_utils import extract_text_from_pdfs
-from stock_utils import get_stock_summary
+from utils.pdf_utils import extract_text_from_pdfs
+from utils.stock_utils import get_stock_summary
 
 
 def is_ollama_running():
@@ -25,13 +25,6 @@ def start_ollama():
             subprocess.Popen(["ollama", "serve"])
         except Exception as e:
             st.error(f"❌ Impossible de démarrer Ollama : {e}")
-
-
-import ollama
-import streamlit as st
-from pdf_utils import extract_text_from_pdfs
-from stock_utils import get_stock_summary
-
 
 def process_pdfs_with_llm(pdf_files, ticker):
     """
