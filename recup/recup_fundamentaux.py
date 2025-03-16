@@ -1,5 +1,5 @@
 import streamlit as st
-from stock_utils import get_fundamental_ratios
+from utils.stock_utils import get_fundamental_ratios
 
 
 def display_fundamental_ratios(ticker):
